@@ -1,0 +1,36 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: conference
+
+  mongodb:
+    uri: ${MONGO_URL}
+
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
+
+frontend-server:
+  baseUrl: ${FRONTEND_HOST}
+  
+paystack:
+  base:
+    url: https://api.paystack.co
+    callbackUrl: http://localhost:8080/payment/verify
+  secret: 
+    key: ${PAYSTACK_SECRET_KEY}
+jwt:
+  secretKey: ${JWT_ACCESS_KEY}
+  refreshKey: ${JWT_REFERESH_KEY}
+  expirationTime: ${JWT_EXPIRATIONTIME}
+
+springdoc:
+  dev-url: https://backend.mandmservicescorp.org/shortly
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
