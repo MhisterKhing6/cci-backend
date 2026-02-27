@@ -18,7 +18,7 @@ frontend-server:
 paystack:
   base:
     url: https://api.paystack.co
-    callbackUrl: http://localhost:8080/payment/verify
+    callbackUrl: http://16.59.26.23/payment/verify
   secret: 
     key: ${PAYSTACK_SECRET_KEY}
 jwt:

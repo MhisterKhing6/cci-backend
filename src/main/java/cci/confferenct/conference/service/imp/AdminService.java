@@ -165,6 +165,11 @@ public class AdminService implements AdminServiceInterface {
                 .build();
     }
 
+    @Override
+    public Page<Confrence> getConfrence(Pageable pageable) {
+        return confrenceRepository.findAll(pageable);
+    }
+
    
 
     /**

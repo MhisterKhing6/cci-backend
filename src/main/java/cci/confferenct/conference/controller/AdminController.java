@@ -54,6 +54,13 @@ public class AdminController {
     public Confrence addConfrence(@RequestBody @Valid ConferenceDetailsRequest conferenceDetails) {
         return adminService.addConference(conferenceDetails);
     }
+
+    @GetMapping("/confrences")
+    @Operation(summary = "List conferences", description = "Get paginated list of all conferences")
+    public Page<Confrence> getAll(
+        @PageableDefault(sort = "startDate", direction = Sort.Direction.DESC, size = 30) Pageable pageable) {
+        return adminService.getConfrence(pageable);
+    }
     
     @DeleteMapping("confrence-delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")

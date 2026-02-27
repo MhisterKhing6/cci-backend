@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: cci-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - cci-network
+
+  app:
+    build: .
+    container_name: cci-conference-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USERNAME:-admin}:${MONGO_PASSWORD:-password}@mongodb:27017/${MONGO_DATABASE:-conference}?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY}
+      PAYSTACK_BASE_CALLBACK_URL: ${PAYSTACK_BASE_CALLBACK_URL}
+    depends_on:
+      - mongodb
+    networks:
+      - cci-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  cci-network:
+    driver: bridge

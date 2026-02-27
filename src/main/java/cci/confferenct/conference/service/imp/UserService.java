@@ -135,7 +135,8 @@ public class UserService implements UserServiceInterface {
     
     @Override
     public Page<Confrence> getConfrence(Pageable pageable) {
-        return confrenceRepository.findAll(pageable);
+        long currentTimeMillis = System.currentTimeMillis();
+        return confrenceRepository.findByEndDateGreaterThan(currentTimeMillis, pageable);
     }
 
     @Override

@@ -26,6 +26,9 @@ public interface AdminServiceInterface {
     Confrence getConferenceById(String id);
 
     UserResponse toggleConferenceStatus(String conferenceId);
+    
+    Page<Confrence> getConfrence(Pageable pageable);
+
 
 }
 
