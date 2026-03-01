@@ -18,11 +18,8 @@ public class ConferenceDetailsRequest {
 
     private String description;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "CCI price must be greater than 0")
-    private double cciPrice;
-
-    @DecimalMin(value = "0.0", inclusive = false, message = "Non-CCI price must be greater than 0")
-    private double nonCciPrice;
+    @DecimalMin(value = "0.0", inclusive = false, message = "Cost must be greater than 0")
+    private double costOfConfrence;
 
     @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date must be today or in the future")

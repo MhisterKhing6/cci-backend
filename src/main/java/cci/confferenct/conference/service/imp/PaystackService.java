@@ -38,7 +38,9 @@ public class PaystackService implements PaymentServiceInterface {
     private final TransactionRepository transactionRepository;
     @Value("${paystack.base.callbackUrl}")
     private String callbackUrl;
-        private final UserRepository userRepository;
+    @Value("${cost-conference.dolar-rate}")
+    private int dolarRate;
+    private final UserRepository userRepository;
 
     private Mono<Map> initializeTransaction( String email, BigDecimal amount, String reference) {
 
@@ -46,7 +48,7 @@ public class PaystackService implements PaymentServiceInterface {
         body.put("email", email);
 
         long amountInPesewas = amount
-                .multiply(BigDecimal.valueOf(100))
+                .multiply(BigDecimal.valueOf(100 * dolarRate ))
                 .longValueExact();
 
         body.put("amount", amountInPesewas);

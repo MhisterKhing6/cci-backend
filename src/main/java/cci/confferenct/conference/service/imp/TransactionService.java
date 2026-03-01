@@ -3,6 +3,7 @@ package cci.confferenct.conference.service.imp;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,8 @@ public class TransactionService implements TransactionServiceInterface {
     private final UserRepository userRepository;
     private final ConfrenceRegistrationRepository confRegRepository;
     private final MongoTemplate mongoTemplate;
+    @Value("${cost-conference.childrenRate}")
+    private int childrenRate;
     
     @Override
     public Page<Transaction> getAllTransactions(Pageable pageable) { 
@@ -54,7 +57,7 @@ public class TransactionService implements TransactionServiceInterface {
         Confrence conference = conferenceRepository.findById(registerConferencRequest.getConferenceId())
                 .orElseThrow(() -> new EntityNotFound("Conference not found"));
     
-        double costOfConfrence = user.isCCIMember() ? conference.getCciPrice() : conference.getNonCciPrice();
+        double costOfConfrence = conference.getCostOfConfrence();
         RegistrationType regType = user.isCCIMember() ? RegistrationType.CCIMEMBER : RegistrationType.NONCCIMEMBER;
         //check if today is greater than start conference dat throw runtime error throw and expetion
         long currentTimeMillis = System.currentTimeMillis();
@@ -62,8 +65,13 @@ public class TransactionService implements TransactionServiceInterface {
         if(conference.getStartDate() < currentTimeMillis) {
             throw new OperationNotPermitted("Conference has not started yet");
         }
+        int costOfChildren = 0;
+        if(registerConferencRequest.getNumberofChlidren() > 5)
+             {
+                costOfChildren = childrenRate;
+             }
         //check if the amount is greater than conference cost throw opertion not permitted excetion
-        if(user.getBalance().compareTo(BigDecimal.valueOf(costOfConfrence)) < 0) {
+        if(user.getBalance().compareTo(BigDecimal.valueOf(costOfConfrence + costOfChildren)) < 0) {
             throw new OperationNotPermitted("Insufficient balance");
         }
         //form user info
@@ -85,17 +93,18 @@ public class TransactionService implements TransactionServiceInterface {
         registerConfrenceRegistration.setConfrenceInfo(confrenceInfo);
         registerConfrenceRegistration.setConfrenceId(conference.getId());
         registerConfrenceRegistration.setUserEmail(user.getEmail());
-        registerConfrenceRegistration.setCost(costOfConfrence);
+        registerConfrenceRegistration.setCost(costOfConfrence + costOfChildren);
         registerConfrenceRegistration.setRegistrationDate(System.currentTimeMillis());
         registerConfrenceRegistration.setRegistrationType(regType);
+        registerConfrenceRegistration.setNumberOfChildren(registerConferencRequest.getNumberofChlidren());
         confRegRepository.save(registerConfrenceRegistration);        
-        user.setBalance(user.getBalance().subtract(BigDecimal.valueOf(costOfConfrence)));
+        user.setBalance(user.getBalance().subtract(BigDecimal.valueOf(costOfConfrence + costOfChildren)));
         userRepository.save(user);
 
         Transaction transaction = new Transaction();
 
         transaction.setAccessCode("DEBIT");
-        transaction.setAmount(BigDecimal.valueOf(costOfConfrence));
+        transaction.setAmount(BigDecimal.valueOf(costOfConfrence + costOfChildren));
         transaction.setUserInfo(userInfo);
         transaction.setStatus("success");
         transaction.setReference("DEBIT");

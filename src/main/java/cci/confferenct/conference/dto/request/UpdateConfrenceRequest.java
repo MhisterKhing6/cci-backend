@@ -9,7 +9,6 @@ public class UpdateConfrenceRequest {
     private long startDate;
     private long endDate;
     private String location;
-    private double cciPrice;
-    private double nonCciPrice;
+    private Double costOfConfrence;
     private Boolean isActive;
 }

@@ -16,7 +16,7 @@ public class Confrence {
     private long startDate;
     private long endDate;
     private String location;
-    private double cciPrice;
-    private double nonCciPrice;
+    private double costOfConfrence;
     private boolean isActive;
+
 }

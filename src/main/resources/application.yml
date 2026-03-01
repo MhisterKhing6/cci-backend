@@ -34,3 +34,6 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+cost-conference:
+  dolar-rate: 12
+  childrenRate : 50

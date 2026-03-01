@@ -18,5 +18,6 @@ public class ConfrenceRegistration {
     private RegistrationType registrationType;
     private double cost;
     private UserInfo userInfo;
-    private ConfrenceInfo confrenceInfo;   
+    private ConfrenceInfo confrenceInfo; 
+    private int numberOfChildren; 
 }

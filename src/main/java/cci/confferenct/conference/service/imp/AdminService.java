@@ -66,11 +66,8 @@ public class AdminService implements AdminServiceInterface {
         if (updatedConference.getLocation() != null) {
             existing.setLocation(updatedConference.getLocation());
         }
-        if (updatedConference.getCciPrice() > 0) {
-            existing.setCciPrice(updatedConference.getCciPrice());
-        }
-        if (updatedConference.getNonCciPrice() > 0) {
-            existing.setNonCciPrice(updatedConference.getNonCciPrice());
+        if (updatedConference.getCostOfConfrence() != null && updatedConference.getCostOfConfrence() > 0) {
+            existing.setCostOfConfrence(updatedConference.getCostOfConfrence());
         }
         if (updatedConference.getIsActive() != null) {
             existing.setActive(updatedConference.getIsActive());
@@ -182,8 +179,7 @@ public class AdminService implements AdminServiceInterface {
     Confrence confrence = new Confrence();
     confrence.setName(conferenceDetails.getName());
     confrence.setDescription(conferenceDetails.getDescription());
-    confrence.setCciPrice(conferenceDetails.getCciPrice());
-    confrence.setNonCciPrice(conferenceDetails.getNonCciPrice());
+    confrence.setCostOfConfrence(conferenceDetails.getCostOfConfrence());
 
     long startMillis = conferenceDetails.getStartDate()
             .atZone(ZoneId.systemDefault())

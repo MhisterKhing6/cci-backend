@@ -7,5 +7,8 @@ import lombok.Data;
 public class RegisterConferencRequest {
     @NotBlank(message="ConfrenceId is required")
     private String conferenceId;
+
+    
+    private int numberofChlidren = 0;
     
 }
